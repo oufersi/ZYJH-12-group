@@ -1,0 +1,119 @@
+@blue: #4976ff;
+
+.water {
+  position: absolute;
+  top: var(--edger-safe-area-inset-top);
+  bottom: var(--edger-safe-area-inset-bottom);
+  left: 0;
+  right: 0;
+  > h4 {
+    margin: 0;
+    height: 46px;
+    line-height: 46px;
+    text-align: center;
+    letter-spacing: 4px;
+  }
+}
+
+.water-content {
+  width: auto;
+  padding: 12px 32px;
+  overflow-x: hidden;
+  > h4 {
+    margin: 20px 0 0 0;
+    font-size: 12px;
+    font-weight: bolder;
+  }
+  :global(.van-stepper__plus) {
+    background-color: @blue !important;
+  }
+  :global(.van-stepper__minus) {
+    color: @blue;
+    border-color: @blue;
+  }
+  .input {
+    &:global(.van-cell) {
+      padding: 0 16px !important;
+    }
+  }
+  :global(.van-cell__value) {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+  }
+}
+
+.water-viewport {
+  display: flex;
+  justify-content: space-evenly;
+  // &.water-viewport-disabled {
+  //   * {
+  //     filter: grayscale(100%);
+  //   }
+  // }
+}
+
+.water-dev {
+  padding: 12px 0 20px;
+}
+
+.water-operation {
+  margin-top: 12px;
+  .water-operation-tabbar {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-bottom: 24px;
+    font-size: 14px;
+    .water-operation-tabbar-item {
+      white-space: nowrap;
+      margin-right: 85px;
+      // line-height: 32px;
+      color: #b0b0b0;
+      position: relative;
+      font-weight: bold;
+      padding: 4px;
+      &:last-child {
+        margin-right: 0;
+      }
+      &.water-operation-tabbar-item-selected {
+        color: @blue;
+        transition: transform .3s;
+        &::before {
+          content: '';
+          display: block;
+          height: 2px;
+          background-color: @blue;
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          animation: bottomSliderEnter .6s ease-in-out;
+        }
+      }
+    }
+  }
+}
+
+.model {
+  :global(.van-dialog__header) {
+    padding: 16px 0;
+    color: #fff;
+    background: @blue;
+  }
+  .model-list {
+    height: 160px;
+    margin-bottom: 24px;
+    overflow: auto;
+  }
+}
+
+@keyframes bottomSliderEnter {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

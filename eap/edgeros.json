@@ -1,0 +1,54 @@
+{
+    "name": "绿植保姆",
+    "bundleid": "eap.water.control.p",
+    "ignore_modules": [
+        "@edgeros/eslint-plugin-jsre",
+        "@edgeros/jsre-types"
+    ],
+    "ignore_path": [
+        "./test/**",
+        "./temp/**",
+        "src/**"
+    ],
+    "assets": {
+        "ico_big": "assets/big.png",
+        "ico_small": "assets/small.png",
+        "ico_widget": "assets/widget.png",
+        "splash": "assets/splash.png"
+    },
+    "program": {
+        "gss": false,
+        "log": "console",
+        "will": false,
+        "reside": false,
+        "mesv": "1.7.8",
+        "experimental": false
+    },
+    "loading": {
+        "splash": "splash",
+        "background": "#fff",
+        "animation": "enlarge"
+    },
+    "vendor": {
+        "id": "768522e69f374b328cf47e738bcc3652",
+        "name": "188****4342",
+        "email": "942144595@qq.com",
+        "phone": "18895684342",
+        "fax": ""
+    },
+    "update": {
+        "remove": [
+            "public"
+        ]
+    },
+    "widget": [
+        {
+            "ico": "ico_widget",
+            "name": "My Widget",
+            "path": "widget",
+            "rows": 2,
+            "columns": 2,
+            "category": "Demo"
+        }
+    ]
+}

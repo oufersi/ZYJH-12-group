@@ -1,0 +1,6 @@
+export {default as arrowPng} from './arrow.png'
+export {default as edgerPng} from './edger.png'
+export {default as humidifierPng} from './humidifier.png'
+export {default as humidifierDisabledPng} from './humidifier_disabled.png'
+export {default as waterPng} from './water.png'
+export {default as waterDisabledPng} from './water_disabled.png'

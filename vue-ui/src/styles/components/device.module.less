@@ -1,0 +1,129 @@
+.device {
+  width: 100%;
+  min-width: 260px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .device-img-left,
+  .device-img-right,
+  .device-edger {
+    width: 47px;
+    height: 47px;
+    border-radius: 50%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .device-img-left {
+    background-image: url(../../assets/humidifier_disabled.png);
+    transition: all 0.3s;
+    &.device-img-left-selected {
+      background-image: url(../../assets/humidifier.png);
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  .device-img-right {
+    background-image: url(../../assets/water_disabled.png);
+    transition: all 0.3s;
+    &.device-img-right-selected {
+      background-image: url(../../assets/water.png);
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  .device-edger {
+    border-radius: 0;
+    background-image: url(../../assets/edger.png);
+  }
+
+  .device-dot-left,
+  .device-dot-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    i {
+      display: block;
+      width: 4px;
+      height: 4px;
+      border-radius: 2px;
+      overflow: hidden;
+      background-color: #ccc;
+      margin: 0 2px;
+    }
+  }
+
+  .device-dot-left-active {
+    i {
+      background-color: #0561ea;
+      &:nth-child(1) {
+        animation: opacity 1.5s linear infinite;
+      }
+      &:nth-child(2) {
+        animation: opacity 1.5s linear 0.2s infinite;
+      }
+      &:nth-child(3) {
+        animation: opacity 1.5s linear 0.4s infinite;
+      }
+      &:nth-child(4) {
+        animation: opacity 1.5s linear 0.6s infinite;
+      }
+      &:nth-child(5) {
+        animation: opacity 1.5s linear 0.8s infinite;
+      }
+      &:nth-child(6) {
+        animation: opacity 1.5s linear 1s infinite;
+      }
+      &:nth-child(7) {
+        animation: opacity 1.5s linear 1.2s infinite;
+      }
+    }
+  }
+  .device-dot-right-active {
+    i {
+      background-color: #0561ea;
+      &:nth-child(7) {
+        animation: opacity 1.5s linear infinite;
+      }
+      &:nth-child(6) {
+        animation: opacity 1.5s linear 0.2s infinite;
+      }
+      &:nth-child(5) {
+        animation: opacity 1.5s linear 0.4s infinite;
+      }
+      &:nth-child(4) {
+        animation: opacity 1.5s linear 0.6s infinite;
+      }
+      &:nth-child(3) {
+        animation: opacity 1.5s linear 0.8s infinite;
+      }
+      &:nth-child(2) {
+        animation: opacity 1.5s linear 1s infinite;
+      }
+      &:nth-child(1) {
+        animation: opacity 1.5s linear 1.2s infinite;
+      }
+    }
+  }
+}
+
+@keyframes opacity {
+  0% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}

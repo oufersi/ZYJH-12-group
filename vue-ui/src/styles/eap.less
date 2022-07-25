@@ -1,0 +1,26 @@
+body {
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  transform: translateX(0);
+  overflow: hidden;
+  background-color: #fff;
+}
+
+*::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}
+
+.scale-enter-active {
+  transition: all 0.8s;
+}
+.scale-enter {
+  transform: scale(0);
+  opacity: 0;
+}
