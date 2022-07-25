@@ -4,8 +4,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .device-img-left,
-  .device-img-right,
+  .device-img-water,
+  .device-img-sensor-one,
   .device-edger {
     width: 47px;
     height: 47px;
@@ -13,10 +13,10 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
-  .device-img-left {
+  .device-img-water {
     background-image: url(../../assets/humidifier_disabled.png);
     transition: all 0.3s;
-    &.device-img-left-selected {
+    &.device-img-water-selected {
       background-image: url(../../assets/humidifier.png);
     }
     &:active {
@@ -24,10 +24,10 @@
     }
   }
 
-  .device-img-right {
+  .device-img-sensor-one {
     background-image: url(../../assets/water_disabled.png);
     transition: all 0.3s;
-    &.device-img-right-selected {
+    &.device-img-sensor-one-selected {
       background-image: url(../../assets/water.png);
     }
     &:active {
@@ -40,8 +40,8 @@
     background-image: url(../../assets/edger.png);
   }
 
-  .device-dot-left,
-  .device-dot-right {
+  .device-dot-water,
+  .device-dot-sensor-one {
     flex: 1;
     display: flex;
     justify-content: center;
@@ -57,7 +57,7 @@
     }
   }
 
-  .device-dot-left-active {
+  .device-dot-water-active {
     i {
       background-color: #0561ea;
       &:nth-child(1) {
@@ -83,7 +83,7 @@
       }
     }
   }
-  .device-dot-right-active {
+  .device-dot-sensor-one-active {
     i {
       background-color: #0561ea;
       &:nth-child(7) {

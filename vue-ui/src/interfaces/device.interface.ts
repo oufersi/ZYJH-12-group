@@ -28,7 +28,7 @@ export interface ISimpleDevice {
 export type IDeviceBrand = 'lumi' | 'jhkj' | 'lgzm' | 'other';
 
 /* 设备类型 */
-export type IDeviceType = 'humidity' | 'water' | 'other';
+export type IDeviceType = 'humidity' | 'water' | 'turbidity' | 'other';
 
 export type IScenes = 'relax' | 'night' | 'movies' | 'wakeup' | 'dinner' | 'reading';
 

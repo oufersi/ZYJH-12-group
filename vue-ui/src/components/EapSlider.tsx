@@ -36,11 +36,10 @@ export default class EapSlider extends Vue {
         <div
           class={[style['slider-block'], this.enable && style['slider-block-active']]}
           style={{ left: this.percent + '%' }}
-          on={{
-            touchstart: this.handleTouchStart,
-            touchmove: this.handleTouchMove,
-            touchend: this.handleTouchEnd
-          }}></div>
+          onTouchstart = {this.handleTouchStart}
+          onTouchmove = {this.handleTouchMove}
+          onTouchend = {this.handleTouchEnd}
+          ></div>
       </div>
     );
   }

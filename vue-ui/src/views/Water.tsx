@@ -16,7 +16,7 @@ import {
   Tag
 } from 'vant';
 import { ISimpleDevice } from '@/interfaces/device.interface';
-import { EapWaveBall, EapDevice, EapSlider } from '../components';
+import { EapWaveBall, EapTurbidityBar, EapDevice, EapSlider } from '../components';
 import { IResponse } from '@/interfaces/api.interface';
 
 Vue.use(Dialog);
@@ -47,6 +47,7 @@ const DEFAULT_SETTINGS = [
 @Component({
   components: {
     'eap-wave-ball': EapWaveBall,
+    'eap-turbidity-bar': EapTurbidityBar,
     'eap-device': EapDevice,
     'eap-slider': EapSlider,
     'van-nav-bar': NavBar,
@@ -71,6 +72,8 @@ const DEFAULT_SETTINGS = [
         this.$data.humidifierId = dev.devid;
       } else if (dev.type === 'water') {
         this.$data.waterId = dev.devid;
+      } else if (dev.type === 'turbidity'){
+        this.$data.waterId = dev.devid;
       }
       // 加入新设备
     },
@@ -81,6 +84,9 @@ const DEFAULT_SETTINGS = [
       } else if (dev.type === 'water') {
         this.$data.waterId = '';
         this.$edger.notify.error('智能浇水设备丢失！');
+      } else if (dev.type === 'turbidity'){
+        this.$data.turbidityId = '';
+        this.$edger.notify.error('水浊度检测设备丢失！')
       }
     },
     error(msg) {
@@ -88,6 +94,9 @@ const DEFAULT_SETTINGS = [
     },
     humidity(data) {
       this.$data.hygrometer = data;
+    },
+    turbidity(data) {
+      this.$data.turbidity = data;
     },
     setting(data: { id: string; limit: number }) {
       const setting = DEFAULT_SETTINGS.find(item => item.id === data.id);
@@ -103,8 +112,9 @@ export default class Water extends Vue {
   private waterId = ''; // 浇水器设备id
   private turbidityId = ''; // 水浊度检测设备id
   // 新属性和新设备id
-  private hygrometer = 93; // 当前湿度值
+  private hygrometer = 50; // 当前湿度值
   private turbidity = 15; // 当前水浊度
+  private turbidity_purity = ''; // 水是否足够纯净
   private model = {
     show: false,
     type: 'humidifier', // humidifier || water || turbidity ||其他新设备
@@ -113,7 +123,8 @@ export default class Water extends Vue {
   private setting = {
     id: 'Custom',
     label: '自定义',
-    limit: 60
+    hygrometer_limit: 60,
+    turbidity_limit: 20,
   };
 
   created() {
@@ -125,17 +136,20 @@ export default class Water extends Vue {
       <div class={style['water']}>
         <h4>绿植保姆</h4>
         <div class={style['water-content']}>
-          {/* 当前数据显示 */}
+          {/* 当前湿度数据显示 */}
           <div class={[style['water-viewport'], !this.humidifierId && style['water-viewport-disabled']]}>
             <eap-wave-ball
               disabled={!this.humidifierId}
               value={this.hygrometer}
-              lowLimit={this.hygrometer < this.setting.limit}
+              lowLimit={this.hygrometer < this.setting.hygrometer_limit}
             />
           </div>
-          
-          <div class={}>
-
+          {/* 当前水浊度数据显示 */}
+          <div class={[style['turbidity-viewport'], !this.turbidityId && style['turbidity-viewport-disabled']]}>
+            <eap-turbidity-bar
+              disabled={!this.turbidityId}
+              highLimit={this.turbidity > this.setting.turbidity_limit}
+            />
           </div>
 
           {/* 设备选择 */}
@@ -143,9 +157,10 @@ export default class Water extends Vue {
           <div class={style['water-dev']}>
             {/* left right 什么意思 */}
             <eap-device
-              leftActive={this.humidifierId}
-              rightActive={this.waterId}
-              on={{ left: () => this.showModel('humidifier'), right: () => this.showModel('water') }}
+              waterActive={this.humidifierId}
+              sensorOneActive={this.waterId}
+              sensorTwoActive={this.turbidityId}
+              on={{ water: () => this.showModel('humidifier'), sensorOne: () => this.showModel('water'), sensorTwo: () => this.showModel('turbidity') }}
             />
           </div>
 
@@ -167,7 +182,7 @@ export default class Water extends Vue {
             <eap-slider
               disabled={!this.waterId || !this.humidifierId}
               readonly={this.setting && this.setting.id !== 'Custom'}
-              value={this.setting.limit}
+              value={this.setting.hygrometer_limit}
               on-change={this.handleChangeLimit}
             />
           </div>
@@ -192,7 +207,7 @@ export default class Water extends Vue {
 
   private renderSelectDevList() {
     return (
-      <van-radio-group value={this.model.type === 'humidifier' ? this.humidifierId : this.waterId}>
+      <van-radio-group value={this.getDeviceId(this.model.type)}>
         <van-cell-group>
           {this.list.map((item: ISimpleDevice) => {
             return (
@@ -211,19 +226,35 @@ export default class Water extends Vue {
     );
   }
 
-  private showModel(type: 'humidifier' | 'water') {
-    this.model = {
-      type,
-      show: true,
-      title: type === 'humidifier' ? '湿度检测器' : '浇水设备'
-    };
+  private showModel(type: 'humidifier' | 'water' | 'turbidity') {
+    if(type === 'humidifier'){
+      this.model = {
+        type,
+        show: true,
+        title: '湿度检测器'
+      };
+    }else if(type === 'water'){
+      this.model = {
+        type,
+        show: true,
+        title: '浇水设备'
+      };
+    }else if(type === 'turbidity'){
+      this.model = {
+        type,
+        show: true,
+        title: '水浊度检测设备'
+      };
+    }else{
+      this.$edger.notify.error('未知的设备类型')
+    }
   }
 
   private handleChangeSettings(e: TouchEvent) {
     const target = e.target as HTMLDivElement;
     if (target && target.dataset.id) {
       const setting = DEFAULT_SETTINGS.find(item => item.id === target.dataset.id) as any;
-      this.$socket?.client.emit('change-scene-setting', { id: setting.id, limit: setting.limit }, (res: IResponse) => {
+      this.$socket?.client.emit('change-scene-setting', { id: setting.id, hygrometer_limit: setting.hygrometer_limit, turbidity: setting.turbidity_limit }, (res: IResponse) => {
         if (!res.result) {
           this.$edger.notify.error(res.message);
         }
@@ -232,7 +263,8 @@ export default class Water extends Vue {
   }
 
   private handleChangeLimit(v: number) {
-    this.$socket?.client.emit('change-scene-setting', { id: this.setting.id, limit: v }, (res: IResponse) => {
+    // console.log(v + ' ' + type)
+    this.$socket?.client.emit('change-scene-setting', { id: this.setting.id, limit: v}, (res: IResponse) => {
       if (!res.result) {
         this.$edger.notify.error(res.message);
       }
@@ -258,6 +290,13 @@ export default class Water extends Vue {
         return this.$edger.notify.error('请选择浇水设备！');
       }
       delete_id = this.waterId;
+    }else if (this.model.type === 'turbidity'){
+      if (this.turbidityId === dev.devid){
+        return;
+      }
+      if (dev.type !== 'turbidity'){
+        return this.$edger.notify.error('请选择水浊度检测器设备！');
+      }
     }
     this.$socket.client.emit('change-scene-devices', { add_id: dev.devid, delete_id }, (res: IResponse) => {
       if (!res || !res.result) {
@@ -265,5 +304,20 @@ export default class Water extends Vue {
       }
     });
     this.model.show = false;
+  }
+
+  private async getDeviceId(model_type : string){
+    if(model_type === "humidifier"){
+      return this.humidifierId;
+    }
+    else if(model_type === "water"){
+      return this.waterId;
+    }
+    else if(model_type === "turbidity"){
+      return this.turbidityId;
+    }
+    else{
+      return this.$edger.notify.error('未知的设备！');
+    }
   }
 }

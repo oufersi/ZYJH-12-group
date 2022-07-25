@@ -3,14 +3,15 @@ import style from '@/styles/components/device.module.less';
 
 @Component({})
 export default class EapDevice extends Vue {
-  @Prop({ default: false }) leftActive?: boolean;
-  @Prop({ default: false }) rightActive?: boolean;
+  @Prop({ default: false }) waterActive?: boolean;
+  @Prop({ default: false }) sensorOneActive?: boolean;
+  @Prop({ default: false }) sensorTwoeActive?: boolean;
 
   public render() {
     return (
       <div class={style['device']}>
-        <div class={[style['device-img-left'], this.leftActive && style['device-img-left-selected']]} onclick={() => this.$emit('left')}></div>
-        <div class={[style['device-dot-left'], this.leftActive && style['device-dot-left-active']]}>
+        <div class={[style['device-img-water'], this.waterActive && style['device-img-water-selected']]} onClick={() => this.$emit('water')}></div>
+        <div class={[style['device-dot-water'], this.waterActive && style['device-dot-water-active']]}>
           <i />
           <i />
           <i />
@@ -20,7 +21,7 @@ export default class EapDevice extends Vue {
           <i />
         </div>
         <div class={style['device-edger']}></div>
-        <div class={[style['device-dot-right'], this.rightActive && style['device-dot-right-active']]}>
+        <div class={[style['device-dot-sensor-one'], this.sensorOneActive && style['device-dot-sensor-one-active']]}>
           <i />
           <i />
           <i />
@@ -29,7 +30,8 @@ export default class EapDevice extends Vue {
           <i />
           <i />
         </div>
-        <div class={[style['device-img-right'], this.rightActive && style['device-img-right-selected']]} onclick={() => this.$emit('right')}></div>
+        <div class={[style['device-img-sensor-one'], this.sensorOneActive && style['device-img-sensor-one-selected']]} onClick={() => this.$emit('sensorOne')}></div>
+        <div class={[style['device-img-sensor-one'], this.sensorOneActive && style['device-img-sensor-one-selected']]} onClick={() => this.$emit('sensorTwo')}></div>     
       </div>
     );
   }
