@@ -150,6 +150,9 @@ class DeviceManager extends EventEmitter {
     if (type === 'device.watering' && model === 'IDWATERING01B') {
       return { brand: 'lgzm', type: 'water' };
     }
+    if (type === 'device.turbidity' && model === 'IDTURBIDITY01B'){
+      return {brand: 'lgzm', type: 'turbidity'}
+    }
     return { brand: 'other', type: 'other' };
   }
 }

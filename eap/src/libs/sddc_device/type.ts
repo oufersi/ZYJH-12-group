@@ -42,7 +42,7 @@ export interface IBrandConfig {
 export type IDeviceBrand = 'lumi' | 'jhkj' | 'lgzm' | 'other';
 
 /* 设备类型 */
-export type IDeviceType = 'humidity' | 'water' | 'other';
+export type IDeviceType = 'humidity' | 'water' | 'turbidity' | 'other';
 
 /* 设备控制对象 */
 export { default as IController } from 'device';
