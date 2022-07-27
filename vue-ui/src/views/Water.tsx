@@ -133,8 +133,8 @@ export default class Water extends Vue {
   public render() {
     return (
       <div class={style['water']}>
-        <h4>绿植保姆</h4>
         <div class={style['water-content']}>
+          <h3>绿植保姆</h3>
           {/* 当前湿度数据显示 */}
           <div class={[style['water-viewport'], !this.humidifierId && style['water-viewport-disabled']]}>
             <eap-wave-ball

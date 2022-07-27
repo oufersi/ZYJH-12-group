@@ -28,7 +28,7 @@ export default class EapSlider extends Vue {
       <div
         ref='slider'
         class={[style['slider'], this.disabled && style['slider-disabled'], this.readonly && style['slider-readonly']]}>
-        <div class={[style['slider-bar']]} style={{ width: this.percent + '%' }}>
+        <div class={[style['slider-bar']]} style={{ width: this.percent + '%', background: 'linear-gradient(90deg , #d0e4fc, rgb(' + (201 - 2.01 * this.percent) + ', ' + (223 - 1.21 * this.percent) + ', 255)' }}>
           <span class={[style['slider-text'], this.percent < 20 && style['slider-text-right']]}>
             {this.percent}<span class={style['slider-text-percent']}>%</span>
           </span>
