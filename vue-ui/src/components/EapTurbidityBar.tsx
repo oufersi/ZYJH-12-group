@@ -11,6 +11,7 @@ export default class EapTurbidityBar extends Vue {
     return (
       <div class={[style['turbidity-bar'], this.disabled && style['turbidity-disabled']]}>
         <div class={[style['status-color'], this.highLimit && style['status-color-limit']]}>水浊度情况</div>
+        <div class={[style['status-color'], this.highLimit && style['status-color-limit']]}>{this.highLimit ? '水源浑浊' : '水源清澈'}</div>
       </div>
     );
   }

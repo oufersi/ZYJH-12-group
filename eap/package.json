@@ -1,6 +1,6 @@
 {
     "name": "eap.water.control.p",
-    "version": "0.0.7",
+    "version": "0.0.54",
     "description": "浇水控制",
     "main": "dist/main.js",
     "scripts": {

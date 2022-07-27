@@ -10,7 +10,9 @@ app.use(WebApp.static('./public'));
 
 let humidityDev = null; // 场景湿度探测设备
 let waterDev = null; // 场景浇水设备
+let turbidityDev = null; // 场景水浊度检测设备
 let watering = false; // 是否正在浇水
+let turbidity_meet = 0;
 let humidityTimer: EdgerOS.Timeout; // 浇水期间加快获取湿度的定时器
 
 const server = new SocketServer(app);
@@ -127,7 +129,8 @@ function generateDevController(devid: string) {
               if (!waterDev) {
                 return;
               }
-              if (data.data.soil_humidity < db.setting?.limit && !watering) {
+              // console.log('check')
+              if (data.data.soil_humidity < db.setting?.limit && !watering && !turbidity_meet) {
                 startWater(); // 浇水
               } else if (data.data.soil_humidity >= db.setting?.limit && watering) {
                 stopWater(); // 停水
@@ -140,6 +143,11 @@ function generateDevController(devid: string) {
                 clearInterval(humidityTimer);
                 humidityTimer = undefined;
               }
+            } else if (dev.type === 'turbidity') {
+              let value = Number(data.data.water_turbidity.toFixed(1));
+              server.emitMessage('turbidity', value);
+              turbidity_meet = value;
+              // console.log('water_turbidity ' + data.data.water_turbidity);
             }
           }
         });
@@ -167,6 +175,11 @@ function initDeviceValue(devid: string) {
       method: 'get',
       obj: ['watering']
     });
+  }else if(brand === 'lgzm' && type === 'turbidity'){
+    devManager.sendDeviceInfo(devid,{
+      method: 'get',
+      obj: ['turbidity']
+    })
   }
 }
 
@@ -220,8 +233,10 @@ function isSceneDev(devid: string) {
 function setSceneDevice(dev: ISimpleDevice) {
   if (dev.type === 'humidity') {
     humidityDev = dev;
-  } else {
+  } else if(dev.type === 'water'){
     waterDev = dev;
+  } else if(dev.type === 'turbidity'){
+    turbidityDev = dev;
   }
 }
 

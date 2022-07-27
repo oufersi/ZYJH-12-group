@@ -48,12 +48,21 @@
       height: 212px;
       position: relative;
       transition: top 1s;
-      &.wave-ball-wave-img-limit {
+      &.wave-ball-wave-img-humidity-limit {
         &::before {
           background-color: #ee1f1f;
         }
         &::after {
           background-color: #f77e7e;
+          
+        }
+      }
+      &.wave-ball-wave-img-turbidity-limit {
+        &::before {
+          background-color: #4f4747;
+        }
+        &::after {
+          background-color: #b3a8a8;
         }
       }
       &.wave-ball-wave-img-disabled {
@@ -143,6 +152,7 @@
   > .status-text {
     width: 80px;
     height: 26px;
+    margin-top: 2px;
     border-radius: 5px;
     background-color: #bad0ff;
     color: #4976ff;
@@ -150,8 +160,11 @@
     font-weight: 600;
     line-height: 26px;
     text-align: center;
-    &.status-text-warning {
+    &.status-text-humidity-warning {
       color: red;
+    }
+    &.status-text-turbidity-warning{
+      color: grey;   
     }
   }
 }

@@ -73,7 +73,7 @@ const DEFAULT_SETTINGS = [
       } else if (dev.type === 'water') {
         this.$data.waterId = dev.devid;
       } else if (dev.type === 'turbidity'){
-        this.$data.waterId = dev.devid;
+        this.$data.turbidityId = dev.devid;
       }
       // 加入新设备
     },
@@ -96,7 +96,8 @@ const DEFAULT_SETTINGS = [
       this.$data.hygrometer = data;
     },
     turbidity(data) {
-      this.$data.turbidity = data;
+      this.$data.turbidity_meet = data ? true : false;
+      // console.log('turbidity received : ' + data + ' ' + this.$data.turbidity_meet);
     },
     setting(data: { id: string; limit: number }) {
       const setting = DEFAULT_SETTINGS.find(item => item.id === data.id);
@@ -113,8 +114,7 @@ export default class Water extends Vue {
   private turbidityId = ''; // 水浊度检测设备id
   // 新属性和新设备id
   private hygrometer = 50; // 当前湿度值
-  private turbidity = 15; // 当前水浊度
-  private turbidity_purity = ''; // 水是否足够纯净
+  private turbidity_meet = true; // 当前水浊度
   private model = {
     show: false,
     type: 'humidifier', // humidifier || water || turbidity ||其他新设备
@@ -123,8 +123,7 @@ export default class Water extends Vue {
   private setting = {
     id: 'Custom',
     label: '自定义',
-    hygrometer_limit: 60,
-    turbidity_limit: 20,
+    limit: 60,
   };
 
   created() {
@@ -141,16 +140,17 @@ export default class Water extends Vue {
             <eap-wave-ball
               disabled={!this.humidifierId}
               value={this.hygrometer}
-              lowLimit={this.hygrometer < this.setting.hygrometer_limit}
+              lowLimit={this.hygrometer < this.setting.limit}
+              highLimit={this.turbidity_meet}
             />
           </div>
           {/* 当前水浊度数据显示 */}
-          <div class={[style['turbidity-viewport'], !this.turbidityId && style['turbidity-viewport-disabled']]}>
+          {/* <div class={[style['turbidity-viewport'], !this.turbidityId && style['turbidity-viewport-disabled']]}>
             <eap-turbidity-bar
               disabled={!this.turbidityId}
-              highLimit={this.turbidity > this.setting.turbidity_limit}
+              highLimit={this.turbidity_meet}
             />
-          </div>
+          </div> */}
 
           {/* 设备选择 */}
           <h4>设备选择</h4>
@@ -160,7 +160,7 @@ export default class Water extends Vue {
               waterActive={this.humidifierId}
               sensorOneActive={this.waterId}
               sensorTwoActive={this.turbidityId}
-              on={{ water: () => this.showModel('humidifier'), sensorOne: () => this.showModel('water'), sensorTwo: () => this.showModel('turbidity') }}
+              on={{ water: () => this.showModel('water'), sensorOne: () => this.showModel('humidifier'), sensorTwo: () => this.showModel('turbidity') }}
             />
           </div>
 
@@ -182,7 +182,7 @@ export default class Water extends Vue {
             <eap-slider
               disabled={!this.waterId || !this.humidifierId}
               readonly={this.setting && this.setting.id !== 'Custom'}
-              value={this.setting.hygrometer_limit}
+              value={this.setting.limit}
               on-change={this.handleChangeLimit}
             />
           </div>
@@ -254,7 +254,7 @@ export default class Water extends Vue {
     const target = e.target as HTMLDivElement;
     if (target && target.dataset.id) {
       const setting = DEFAULT_SETTINGS.find(item => item.id === target.dataset.id) as any;
-      this.$socket?.client.emit('change-scene-setting', { id: setting.id, hygrometer_limit: setting.hygrometer_limit, turbidity: setting.turbidity_limit }, (res: IResponse) => {
+      this.$socket?.client.emit('change-scene-setting', { id: setting.id, limit: setting.limit }, (res: IResponse) => {
         if (!res.result) {
           this.$edger.notify.error(res.message);
         }
@@ -298,6 +298,8 @@ export default class Water extends Vue {
         return this.$edger.notify.error('请选择水浊度检测器设备！');
       }
     }
+    //console.log(dev.type);
+    //console.log(this.humidifierId + ' ' + this.waterId + ' ' + this.turbidityId);
     this.$socket.client.emit('change-scene-devices', { add_id: dev.devid, delete_id }, (res: IResponse) => {
       if (!res || !res.result) {
         this.$edger.notify.error(res?.message || '操作失败！');
